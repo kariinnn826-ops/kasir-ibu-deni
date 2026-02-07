@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS Warung Ibu Deni - Akuntansi & Mod Puasa</title>
+    <title>KASIR IBU DENI - FIX PRO</title>
     <style>
         :root { --prm: #2c3e50; --sec: #27ae60; --accent: #e67e22; --danger: #e74c3c; --light: #f4f7f6; --blue: #3498db; --purple: #9b59b6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; padding-bottom: 180px; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; padding-bottom: 240px; }
         .header { background: var(--prm); color: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; }
-        
-        .status-bar { padding: 6px; font-size: 11px; font-weight: bold; text-align: center; }
-        .open { background: #2ecc71; color: white; }
-        .closed { background: #e74c3c; color: white; }
-
+        .status-bar { padding: 6px; font-size: 11px; font-weight: bold; text-align: center; color: white; }
+        .open { background: #2ecc71; }
+        .closed { background: #e74c3c; }
         .container { padding: 15px; max-width: 600px; margin: auto; }
         
-        /* Switch Mod Puasa */
         .mode-selector { background: white; padding: 12px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ddd; }
         .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -24,40 +21,39 @@
         input:checked + .slider { background-color: var(--purple); }
         input:checked + .slider:before { transform: translateX(26px); }
 
-        /* Dashboard 3 Kartu */
         .dashboard { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
         .sub-dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card { padding: 15px; border-radius: 12px; color: white; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card { padding: 12px; border-radius: 12px; color: white; text-align: center; }
         .bg-omset { background: linear-gradient(135deg, #27ae60, #2ecc71); }
         .bg-modal { background: linear-gradient(135deg, #e67e22, #f39c12); }
         .bg-untung { background: linear-gradient(135deg, #3498db, #2980b9); }
 
-        .panel { background: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid #eee; }
-        h2 { font-size: 13px; color: var(--prm); border-left: 4px solid var(--accent); padding-left: 10px; margin-bottom: 10px; text-transform: uppercase; }
-        input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .panel { background: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #eee; }
+        input { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
         
-        .btn-add { background: var(--prm); color: white; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
         .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .card-item { background: white; padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #eee; position: relative; }
-        .btn-qty { border: none; width: 30px; height: 30px; border-radius: 8px; background: #dfe4ea; font-weight: bold; }
+        .btn-qty { border: none; width: 35px; height: 35px; border-radius: 8px; background: #dfe4ea; font-weight: bold; cursor: pointer; }
         .plus { background: var(--accent) !important; color: white; }
 
-        .log-item { background: white; padding: 10px; border-radius: 10px; margin-bottom: 8px; border-left: 4px solid var(--prm); font-size: 11px; display: flex; justify-content: space-between; align-items: center; }
-        .footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; border-top: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
-        .btn-save { background: var(--sec); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; }
+        .footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; border-top: 3px solid #eee; z-index: 1000; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
+        .calc-row { display: flex; gap: 10px; margin-bottom: 8px; align-items: center; }
+        .pay-input { flex: 1.5; padding: 12px; border: 2px solid var(--blue); border-radius: 8px; font-size: 18px; font-weight: bold; outline: none; }
+        .change-box { flex: 1; padding: 10px; background: #f8f9fa; border-radius: 8px; text-align: right; border: 1px solid #ddd; }
+        .btn-save { flex: 1; padding: 15px; background: var(--sec); color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1 style="margin:0; font-size: 16px;">WARUNG IBU DENI PRO</h1>
+    <h1 style="margin:0; font-size: 16px;">KASIR IBU DENI PRO</h1>
     <div id="clock" style="font-size: 10px; opacity: 0.8;"></div>
 </div>
 <div id="shopStatus" class="status-bar">MEMUAT...</div>
 
 <div class="container">
     <div class="mode-selector">
-        <span id="modeLabel" style="font-size: 12px; font-weight: bold;">📅 MODE BIASA (06:00-12:00)</span>
+        <span id="modeLabel" style="font-size: 12px; font-weight: bold;">📅 MODE BIASA</span>
         <label class="switch">
             <input type="checkbox" id="modeSwitch" onchange="handleModeChange()">
             <span class="slider"></span>
@@ -65,45 +61,46 @@
     </div>
 
     <div class="dashboard">
-        <div class="card bg-omset">
-            <small>OMSET (UANG MASUK)</small>
-            <div id="omsetHarian" style="font-size: 24px; font-weight: bold;">Rp 0</div>
-        </div>
+        <div class="card bg-omset"><small>OMSET (UANG DI LACI)</small><div id="omsetHarian" style="font-size: 22px; font-weight: bold;">Rp 0</div></div>
         <div class="sub-dashboard">
-            <div class="card bg-modal">
-                <small>MODAL</small>
-                <div id="modalHarian" style="font-size: 16px; font-weight: bold;">Rp 0</div>
-            </div>
-            <div class="card bg-untung">
-                <small>UNTUNG BERSIH</small>
-                <div id="untungHarian" style="font-size: 16px; font-weight: bold;">Rp 0</div>
-            </div>
+            <div class="card bg-modal"><small>MODAL</small><div id="modalHarian" style="font-size: 16px; font-weight: bold;">Rp 0</div></div>
+            <div class="card bg-untung"><small>UNTUNG</small><div id="untungHarian" style="font-size: 16px; font-weight: bold;">Rp 0</div></div>
         </div>
-    </div>
-
-    <div style="display:flex; gap:10px; margin-bottom:15px;">
-        <button onclick="exportLaporan()" style="flex:1; padding:10px; background:var(--blue); color:white; border:none; border-radius:8px; font-weight:bold; font-size:11px;">📥 EXCEL</button>
-        <button onclick="tutupBuku()" style="flex:1; padding:10px; background:var(--danger); color:white; border:none; border-radius:8px; font-weight:bold; font-size:11px;">🚩 RESET</button>
     </div>
 
     <div class="panel">
-        <h2>PENGATURAN MENU</h2>
         <input type="text" id="addNama" placeholder="Nama Menu">
-        <input type="number" id="addModal" placeholder="Harga Modal per Biji">
-        <input type="number" id="addHarga" placeholder="Harga Jual per Biji">
-        <button class="btn-add" onclick="saveMenu()">SIMPAN MENU</button>
+        <div style="display:flex; gap:5px;">
+            <input type="number" id="addModal" placeholder="Modal">
+            <input type="number" id="addHarga" placeholder="Jual">
+        </div>
+        <button onclick="saveMenu()" style="width:100%; padding:12px; background:var(--prm); color:white; border:none; border-radius:8px; font-weight:bold;">+ TAMBAH MENU</button>
     </div>
 
-    <input type="text" id="searchMenu" placeholder="🔎 Cari menu..." onkeyup="filterMenu()" style="border: 2px solid var(--accent);">
-    <div class="grid-menu" id="menuArea" style="margin-top:15px;"></div>
+    <div style="display:flex; gap:10px; margin-bottom:15px;">
+        <button onclick="exportLaporan()" style="flex:1; padding:10px; background:var(--blue); color:white; border:none; border-radius:8px; font-size:11px;">📥 EXCEL</button>
+        <button onclick="tutupBuku()" style="flex:1; padding:10px; background:var(--danger); color:white; border:none; border-radius:8px; font-size:11px;">🚩 RESET</button>
+    </div>
 
-    <h2 style="margin-top:25px;">CATATAN PENJUALAN</h2>
+    <input type="text" id="searchMenu" placeholder="🔎 Cari menu..." onkeyup="filterMenu()" style="border: 2px solid var(--accent); margin-bottom:15px;">
+    <div class="grid-menu" id="menuArea"></div>
+
+    <h2 style="font-size:14px; margin-top:30px;">RIWAYAT TRANSAKSI</h2>
     <div id="historyArea"></div>
 </div>
 
 <div class="footer-bar">
-    <div><small>TOTAL BAYAR</small><div id="grandTotal" style="font-size: 20px; font-weight: bold; color: var(--prm);">Rp 0</div></div>
-    <button class="btn-save" onclick="simpanTransaksi()">SIMPAN</button>
+    <div class="calc-row">
+        <div style="flex:1"><small>TOTAL BELI</small><div id="grandTotal" style="font-size: 20px; font-weight: 900; color: var(--danger);">Rp 0</div></div>
+        <input type="number" id="cashIn" class="pay-input" placeholder="Uang Pelanggan..." oninput="calcChange()">
+    </div>
+    <div class="calc-row">
+        <div class="change-box">
+            <small>KEMBALIAN</small>
+            <div id="changeAmount" style="font-size: 18px; font-weight: bold; color: var(--sec);">Rp 0</div>
+        </div>
+        <button onclick="simpanTransaksi()" class="btn-save">SIMPAN</button>
+    </div>
 </div>
 
 <script>
@@ -114,83 +111,100 @@
     function updateClock() {
         const now = new Date();
         document.getElementById('clock').innerText = now.toLocaleString('id-ID');
-        updateStatus();
-    }
-    setInterval(updateClock, 1000);
-
-    function handleModeChange() {
-        const isP = document.getElementById('modeSwitch').checked;
-        document.getElementById('modeLabel').innerText = isP ? "🌙 MODE PUASA (14:30-18:30)" : "📅 MODE BIASA (06:00-12:00)";
-        updateStatus();
-    }
-
-    function updateStatus() {
-        const now = new Date();
         const t = now.getHours() + (now.getMinutes()/60);
         const isP = document.getElementById('modeSwitch').checked;
         const el = document.getElementById('shopStatus');
         let open = isP ? (t >= 14.5 && t < 18.5) : (t >= 6 && t < 12);
-        el.innerText = open ? "● WARUNG SEDANG BUKA" : "○ WARUNG SUDAH TUTUP";
+        el.innerText = open ? "● WARUNG BUKA" : "○ WARUNG TUTUP";
         el.className = "status-bar " + (open ? "open" : "closed");
+        document.getElementById('modeLabel').innerText = isP ? "🌙 MODE PUASA (14:30-18:30)" : "📅 MODE BIASA (06:00-12:00)";
     }
+    setInterval(updateClock, 1000);
+    function handleModeChange() { updateClock(); }
 
     function saveMenu() {
         const n = document.getElementById('addNama').value, m = parseInt(document.getElementById('addModal').value), h = parseInt(document.getElementById('addHarga').value);
-        if(n && m && h) {
+        if(n && !isNaN(m) && !isNaN(h)) {
             db_menu.push({ nama: n, modal: m, harga: h });
             localStorage.setItem('deni_vpro_menu', JSON.stringify(db_menu));
             renderMenu();
             document.getElementById('addNama').value = ""; document.getElementById('addModal').value = ""; document.getElementById('addHarga').value = "";
-        } else { alert("Isi Nama, Modal, dan Jual!"); }
+        }
     }
 
     function renderMenu() {
         const area = document.getElementById('menuArea'); area.innerHTML = "";
         db_menu.forEach((item, i) => {
-            area.innerHTML += `
-                <div class="card-item" data-name="${item.nama.toLowerCase()}">
-                    <button style="position:absolute;right:5px;top:2px;border:none;background:none;color:#ccc;" onclick="deleteMenu(${i})">×</button>
-                    <b style="font-size:14px;">${item.nama}</b><br>
-                    <small style="color:var(--accent)">Rp ${item.harga.toLocaleString()}</small>
-                    <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-top:8px;">
-                        <button class="btn-qty" onclick="qty('${item.nama}', ${item.harga}, ${item.modal}, -1)">-</button>
-                        <span id="q-${item.nama.replace(/\s/g, '')}" style="font-weight:bold">0</span>
-                        <button class="btn-qty plus" onclick="qty('${item.nama}', ${item.harga}, ${item.modal}, 1)">+</button>
-                    </div>
-                </div>`;
+            const safeId = item.nama.replace(/[^a-zA-Z0-9]/g, '');
+            area.innerHTML += `<div class="card-item">
+                <button style="position:absolute;right:5px;top:2px;border:none;background:none;color:#ccc;font-size:18px;" onclick="deleteMenu(${i})">×</button>
+                <b style="font-size:14px;">${item.nama}</b><br>
+                <b style="color:var(--accent)">${item.harga.toLocaleString()}</b>
+                <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-top:10px;">
+                    <button class="btn-qty" onclick="qty('${item.nama}', ${item.harga}, ${item.modal}, -1)">-</button>
+                    <span id="q-${safeId}" style="font-weight:bold; font-size:16px;">0</span>
+                    <button class="btn-qty plus" onclick="qty('${item.nama}', ${item.harga}, ${item.modal}, 1)">+</button>
+                </div>
+            </div>`;
         });
     }
 
     function qty(nama, harga, modal, delta) {
         if(!cart[nama]) cart[nama] = { q: 0, p: harga, m: modal };
         cart[nama].q += delta;
-        if(cart[nama].q <= 0) delete cart[nama];
-        const el = document.getElementById(`q-${nama.replace(/\s/g, '')}`);
+        if(cart[nama].q <= 0) { delete cart[nama]; }
+        const safeId = nama.replace(/[^a-zA-Z0-9]/g, '');
+        const el = document.getElementById(`q-${safeId}`);
         if(el) el.innerText = cart[nama] ? cart[nama].q : 0;
         updateTotal();
     }
 
     function updateTotal() {
         let total = 0;
-        for(let k in cart) total += cart[k].q * cart[k].p;
+        for(let k in cart) total += (cart[k].q * cart[k].p);
         document.getElementById('grandTotal').innerText = "Rp " + total.toLocaleString();
         return total;
     }
 
+    function calcChange() {
+        const total = updateTotal();
+        const cash = parseInt(document.getElementById('cashIn').value) || 0;
+        const change = cash - total;
+        document.getElementById('changeAmount').innerText = "Rp " + (change > 0 ? change.toLocaleString() : 0);
+    }
+
     function simpanTransaksi() {
         const total = updateTotal();
-        if(total === 0) return alert("Keranjang kosong!");
-        let tModal = 0, tLaba = 0;
-        let detail = "";
+        if(total === 0) { alert("Pilih menu dulu!"); return; }
+        
+        const cash = parseInt(document.getElementById('cashIn').value) || total;
+        const kembalian = cash - total;
+        
+        let tM = 0, tL = 0, det = "";
         for(let k in cart) {
-            tModal += cart[k].m * cart[k].q;
-            tLaba += (cart[k].p - cart[k].m) * cart[k].q;
-            detail += `${k}(${cart[k].q}) `;
+            tM += (cart[k].m * cart[k].q);
+            tL += ((cart[k].p - cart[k].m) * cart[k].q);
+            det += `${k}(${cart[k].q}) `;
         }
-        const now = new Date();
-        db_history.push({ id: Date.now(), tgl: now.toLocaleString('id-ID'), tglS: now.toLocaleDateString('id-ID'), item: detail, omset: total, modal: tModal, laba: tLaba });
+        
+        db_history.push({ 
+            id: Date.now(), 
+            tglS: new Date().toLocaleDateString('id-ID'), 
+            item: det, 
+            omset: total, 
+            modal: tM, 
+            laba: tL,
+            bayar: cash,
+            kembali: kembalian
+        });
+        
         localStorage.setItem('deni_vpro_logs', JSON.stringify(db_history));
-        cart = {}; renderMenu(); updateTotal(); renderHistory();
+        cart = {}; 
+        document.getElementById('cashIn').value = ""; 
+        renderMenu(); 
+        updateTotal(); 
+        calcChange();
+        renderHistory();
         alert("Transaksi Berhasil!");
     }
 
@@ -200,9 +214,13 @@
         let o = 0, m = 0, l = 0;
         db_history.slice().reverse().forEach(log => {
             if(log.tglS === hariIni) { o += log.omset; m += log.modal; l += log.laba; }
-            area.innerHTML += `<div class="log-item">
-                <div><b>Rp ${log.omset.toLocaleString()}</b> <small>(M:${log.modal.toLocaleString()} | U:${log.laba.toLocaleString()})</small><br>${log.item}</div>
-                <button style="border:none;background:none;color:var(--danger);" onclick="deleteLog(${log.id})">🗑️</button>
+            area.innerHTML += `<div style="background:white; padding:12px; border-radius:10px; margin-bottom:8px; border-left:5px solid var(--prm); display:flex; justify-content:space-between; align-items:center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <div style="font-size:12px;">
+                    <b>Total: Rp ${log.omset.toLocaleString()}</b><br>
+                    <small style="color:#666">${log.item}</small><br>
+                    <small style="color:var(--blue)">Bayar: ${log.bayar.toLocaleString()} | Kembali: ${log.kembali.toLocaleString()}</small>
+                </div>
+                <button onclick="deleteLog(${log.id})" style="border:none; background:none; color:var(--danger); font-size:20px;">🗑️</button>
             </div>`;
         });
         document.getElementById('omsetHarian').innerText = "Rp " + o.toLocaleString();
@@ -211,23 +229,22 @@
     }
 
     function exportLaporan() {
-        if(db_history.length === 0) return alert("Kosong.");
-        let csv = "Tanggal,Item,Omset,Modal,Untung\n";
-        db_history.forEach(h => { csv += `${h.tgl},"${h.item}",${h.omset},${h.modal},${h.laba}\n`; });
+        if(db_history.length === 0) return alert("Belum ada data.");
+        let csv = "Tanggal,Item,Omset,Modal,Untung,Bayar,Kembalian\n";
+        db_history.forEach(h => { csv += `${h.tglS},"${h.item}",${h.omset},${h.modal},${h.laba},${h.bayar},${h.kembali}\n`; });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
         a.download = `Laporan_Ibu_Deni.csv`; a.click();
     }
 
-    function tutupBuku() { if(confirm("Reset data hari ini?")) { db_history = []; localStorage.setItem('deni_vpro_logs', "[]"); renderHistory(); } }
-    function deleteMenu(i) { if(confirm("Hapus?")) { db_menu.splice(i,1); localStorage.setItem('deni_vpro_menu', JSON.stringify(db_menu)); renderMenu(); } }
-    function deleteLog(id) { if(confirm("Hapus?")) { db_history = db_history.filter(x => x.id !== id); localStorage.setItem('deni_vpro_logs', JSON.stringify(db_history)); renderHistory(); } }
+    function tutupBuku() { if(confirm("Hapus semua riwayat harian?")) { db_history = []; localStorage.setItem('deni_vpro_logs', "[]"); renderHistory(); } }
+    function deleteMenu(i) { if(confirm("Hapus menu ini?")) { db_menu.splice(i,1); localStorage.setItem('deni_vpro_menu', JSON.stringify(db_menu)); renderMenu(); } }
+    function deleteLog(id) { if(confirm("Hapus transaksi ini?")) { db_history = db_history.filter(x => x.id !== id); localStorage.setItem('deni_vpro_logs', JSON.stringify(db_history)); renderHistory(); } }
     function filterMenu() {
         let kw = document.getElementById('searchMenu').value.toLowerCase();
         let items = document.getElementsByClassName('card-item');
-        for (let it of items) it.style.display = it.getAttribute('data-name').includes(kw) ? "block" : "none";
+        for (let it of items) it.style.display = it.innerText.toLowerCase().includes(kw) ? "block" : "none";
     }
-
     renderMenu(); renderHistory(); updateClock();
 </script>
 </body>
