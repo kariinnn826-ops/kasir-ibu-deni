@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasir Ibu Deni - Pro System</title>
+    <style>
+        :root { --prm: #2c3e50; --sec: #27ae60; --accent: #e67e22; --danger: #e74c3c; --light: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; padding-bottom: 150px; }
+        
+        .header { background: var(--prm); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
+
+        .container { padding: 15px; max-width: 600px; margin: auto; }
+
+        .income-card { 
+            background: linear-gradient(135deg, #27ae60, #2ecc71); 
+            color: white; padding: 20px; border-radius: 15px; 
+            margin-bottom: 20px; text-align: center; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .panel { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        h2 { font-size: 16px; color: var(--prm); border-left: 4px solid var(--accent); padding-left: 10px; margin-bottom: 15px; }
+
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: var(--accent); }
+        
+        .btn-add { background: var(--prm); color: white; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+        /* Fitur Cari */
+        .search-box { margin-bottom: 15px; background: white; border-radius: 10px; border: 2px solid var(--accent); }
+
+        /* Grid Menu */
+        .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .card-item { background: white; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #eee; position: relative; }
+        .card-item b { display: block; margin-bottom: 5px; }
+        .card-item span { color: var(--accent); font-weight: bold; display: block; margin-bottom: 10px; }
+        
+        .counter { display: flex; justify-content: center; align-items: center; gap: 12px; }
+        .btn-qty { border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; background: #dfe4ea; font-weight: bold; }
+        .btn-qty.plus { background: var(--accent); color: white; }
+        
+        .btn-del-menu { position: absolute; top: 5px; right: 5px; background: none; border: none; color: #ccc; cursor: pointer; font-size: 18px; }
+
+        /* Riwayat dengan fitur Hapus */
+        .log-item { 
+            background: white; padding: 12px; border-radius: 10px; 
+            margin-bottom: 8px; border-left: 4px solid var(--prm); 
+            font-size: 12px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .btn-del-log { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 16px; }
+
+        .footer-bar { 
+            position: fixed; bottom: 0; left: 0; right: 0; background: white; 
+            padding: 20px; border-top: 2px solid #eee; display: flex; 
+            justify-content: space-between; align-items: center; z-index: 1000; 
+        }
+        .btn-save { 
+            background: var(--sec); color: white; border: none; padding: 15px 30px; 
+            border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>WARUNG IBU DENI</h1>
+    <div id="clock" style="font-size: 12px; margin-top: 5px; opacity: 0.8;"></div>
+</div>
+
+<div class="container">
+    <div class="income-card">
+        <small>PEMASUKAN HARI INI</small>
+        <h1 id="incomeToday" style="margin: 5px 0;">Rp 0</h1>
+    </div>
+
+    <div class="panel">
+        <h2>Tambah Menu Baru</h2>
+        <input type="text" id="addNama" placeholder="Nama Makanan...">
+        <input type="number" id="addHarga" placeholder="Harga (Rp)...">
+        <button class="btn-add" onclick="saveMenu()">+ Simpan ke Daftar</button>
+    </div>
+
+    <h2>Cari & Pilih Menu</h2>
+    <input type="text" id="searchMenu" class="search-box" placeholder="🔎 Cari nama makanan..." onkeyup="filterMenu()">
+    
+    <div class="grid-menu" id="menuArea"></div>
+
+    <h2 style="margin-top: 30px;">Riwayat Transaksi</h2>
+    <div id="historyArea"></div>
+</div>
+
+<div class="footer-bar">
+    <div>
+        <small style="color: #888;">TOTAL TRANSAKSI</small>
+        <div id="grandTotal" style="font-size: 24px; font-weight: 800; color: var(--prm);">Rp 0</div>
+    </div>
+    <button class="btn-save" onclick="simpanTransaksi()">Simpan Transaksi</button>
+</div>
+
+<script>
+    let db_menu = JSON.parse(localStorage.getItem('deni_v4_menu')) || [];
+    let db_history = JSON.parse(localStorage.getItem('deni_v4_logs')) || [];
+    let cart = {};
+
+    function updateClock() {
+        document.getElementById('clock').innerText = new Date().toLocaleString('id-ID');
+    }
+    setInterval(updateClock, 1000);
+
+    // --- MANAJEMEN MENU ---
+    function saveMenu() {
+        const n = document.getElementById('addNama').value;
+        const h = parseInt(document.getElementById('addHarga').value);
+        if(n && h) {
+            db_menu.push({ nama: n, harga: h });
+            localStorage.setItem('deni_v4_menu', JSON.stringify(db_menu));
+            renderMenu();
+            document.getElementById('addNama').value = "";
+            document.getElementById('addHarga').value = "";
+        }
+    }
+
+    function deleteMenu(index) {
+        if(confirm("Hapus menu ini dari daftar?")) {
+            db_menu.splice(index, 1);
+            localStorage.setItem('deni_v4_menu', JSON.stringify(db_menu));
+            renderMenu();
+        }
+    }
+
+    function renderMenu() {
+        const area = document.getElementById('menuArea');
+        area.innerHTML = "";
+        db_menu.forEach((item, i) => {
+            area.innerHTML += `
+                <div class="card-item" data-name="${item.nama.toLowerCase()}">
+                    <button class="btn-del-menu" onclick="deleteMenu(${i})">×</button>
+                    <b>${item.nama}</b>
+                    <span>Rp ${item.harga.toLocaleString()}</span>
+                    <div class="counter">
+                        <button class="btn-qty" onclick="qty('${item.nama}', ${item.harga}, -1)">-</button>
+                        <span id="q-${item.nama}">0</span>
+                        <button class="btn-qty plus" onclick="qty('${item.nama}', ${item.harga}, 1)">+</button>
+                    </div>
+                </div>`;
+        });
+    }
+
+    // --- FITUR CARI ---
+    function filterMenu() {
+        let keyword = document.getElementById('searchMenu').value.toLowerCase();
+        let items = document.getElementsByClassName('card-item');
+        
+        for (let item of items) {
+            let name = item.getAttribute('data-name');
+            if (name.includes(keyword)) {
+                item.style.display = "block";
+            } else {
+                item.style.display = "none";
+            }
+        }
+    }
+
+    // --- LOGIKA KASIR ---
+    function qty(nama, harga, delta) {
+        if(!cart[nama]) cart[nama] = { q: 0, p: harga };
+        cart[nama].q += delta;
+        if(cart[nama].q <= 0) delete cart[nama];
+        document.getElementById(`q-${nama}`).innerText = cart[nama] ? cart[nama].q : 0;
+        updateTotal();
+    }
+
+    function updateTotal() {
+        let total = 0;
+        for(let k in cart) total += cart[k].q * cart[k].p;
+        document.getElementById('grandTotal').innerText = "Rp " + total.toLocaleString();
+        return total;
+    }
+
+    function simpanTransaksi() {
+        const total = updateTotal();
+        if(total === 0) return alert("Pilih menu dulu!");
+
+        const now = new Date();
+        let detail = "";
+        for(let k in cart) detail += `${k}(${cart[k].q}) `;
+
+        const log = {
+            id: Date.now(),
+            tgl: now.toLocaleString('id-ID'),
+            tglShort: now.toLocaleDateString('id-ID'),
+            item: detail,
+            total: total
+        };
+
+        db_history.push(log);
+        localStorage.setItem('deni_v4_logs', JSON.stringify(db_history));
+
+        // Reset
+        cart = {};
+        renderMenu();
+        updateTotal();
+        renderHistory();
+        document.getElementById('searchMenu').value = "";
+    }
+
+    // --- MANAJEMEN RIWAYAT ---
+    function deleteLog(id) {
+        if(confirm("Hapus transaksi ini dari riwayat?")) {
+            db_history = db_history.filter(log => log.id !== id);
+            localStorage.setItem('deni_v4_logs', JSON.stringify(db_history));
+            renderHistory();
+        }
+    }
+
+    function renderHistory() {
+        const area = document.getElementById('historyArea');
+        area.innerHTML = "";
+        const tglHariIni = new Date().toLocaleDateString('id-ID');
+        let income = 0;
+
+        db_history.slice().reverse().forEach(log => {
+            if(log.tglShort === tglHariIni) income += log.total;
+            area.innerHTML += `
+                <div class="log-item">
+                    <div>
+                        <span style="color:#999; font-size:10px;">${log.tgl}</span><br>
+                        <b>Rp ${log.total.toLocaleString()}</b> - <small>${log.item}</small>
+                    </div>
+                    <button class="btn-del-log" onclick="deleteLog(${log.id})">🗑️</button>
+                </div>`;
+        });
+
+        document.getElementById('incomeToday').innerText = "Rp " + income.toLocaleString();
+    }
+
+    renderMenu();
+    renderHistory();
+    updateClock();
+</script>
+
+</body>
+</html>
